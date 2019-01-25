@@ -1,4 +1,4 @@
-import { Rule, Tree, apply, url, applyTemplates, move, chain, mergeWith, template } from '@angular-devkit/schematics';
+import { Rule, Tree, apply, url, applyTemplates, move, chain, mergeWith } from '@angular-devkit/schematics';
 
 import { Schema as MyServiceSchema } from './schema';
 import { getWorkspace } from '../util/workspace';
@@ -10,12 +10,14 @@ export function myService(options: MyServiceSchema): Rule {
   return (tree: Tree) => {
     const workspace = getWorkspace(tree);
 
-    if (options.project) {
-      options.project = workspace['defaultProject'];
+    if (!options.project) {
+      options.project = workspace.projects['defaultProject'];
     }
+    const project = workspace.projects[options.project as string];
+    const projectType = project['projectType'] === 'application' ? 'app' : 'lib';
 
     if (options.path === undefined) {
-      options.path = workspace[options.project]['sourceRoot'];
+      options.path = project['sourceRoot'][projectType];
     }
 
     const templateSource = apply(url('./files'), [
@@ -24,7 +26,7 @@ export function myService(options: MyServiceSchema): Rule {
         dasherize,
         name: options.name
       }),
-      move(normalize(options.path))
+      move(normalize(options.path as string))
     ]);
     
     return chain([
