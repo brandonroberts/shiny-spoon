@@ -17,6 +17,26 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "add": [
+        "dist/add"
+      ],
+      "add/*": [
+        "dist/add/*"
+      ],
+      "add-schematic": [
+        "dist/add-schematic"
+      ],
+      "add-schematic/*": [
+        "dist/add-schematic/*"
+      ],
+      "my-lib": [
+        "dist/my-lib"
+      ],
+      "my-lib/*": [
+        "dist/my-lib/*"
+      ]
+    }
   }
 }
